@@ -19,7 +19,7 @@ ALGOD_TOKEN = ""  # No token needed for Algonode
 algod_client = algod.AlgodClient(ALGOD_TOKEN, ALGOD_ADDRESS)
 
 # Load deployed app ID
-APP_ID = 743782532  # Your deployed smart contract ID
+APP_ID = 743861207  # Your deployed smart contract ID
 
 # Load your 24-word mnemonic from .env
 mnemonic_phrase = os.getenv("ALGOWALLET_MNEMONIC")
