@@ -5,8 +5,8 @@ def song_registry_contract():
     song_count_key = Bytes("song_count")
     
     # Helper functions
-    def get_song_key(song_id, field):
-        return Concat(Bytes("song_"), Itob(song_id), Bytes("_"), Bytes(field))
+    def get_song_key(song_id):
+        return Concat(Bytes("song_"), Itob(song_id))
     
     # Register a new song
     register_song = Seq([
@@ -17,20 +17,16 @@ def song_registry_contract():
         ),
         
         App.globalPut(
-            get_song_key(App.globalGet(song_count_key) - Int(1), "title"),
-            Txn.application_args[1]
-        ),
-        App.globalPut(
-            get_song_key(App.globalGet(song_count_key) - Int(1), "url"), 
-            Txn.application_args[2]
+            get_song_key(App.globalGet(song_count_key) - Int(1)),
+            Concat(
+                Txn.application_args[1], Bytes("|"),  # title
+                Txn.application_args[2], Bytes("|"),  # url  
+                Txn.sender()                          # owner
+            )
         ),
         App.globalPut(
             get_song_key(App.globalGet(song_count_key) - Int(1), "price"),
             Btoi(Txn.application_args[3])
-        ),
-        App.globalPut(
-            get_song_key(App.globalGet(song_count_key) - Int(1), "owner"),
-            Txn.sender()
         ),
         
         Approve()
@@ -67,4 +63,5 @@ if __name__ == "__main__":
     
     print("Smart contract compiled!")
     print("Files created: song_registry_approval.teal, song_registry_clear.teal")
+
 
