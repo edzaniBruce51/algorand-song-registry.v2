@@ -121,30 +121,30 @@ def register_song():
 
         # App call with arguments
         app_args = [
-            b"register_song",
-            title.encode("utf-8"),
-            url.encode("utf-8"),
-            price.to_bytes(8, "big")
+            b"register_song",           # function name
+            title.encode("utf-8"),      # convert string to bytes
+            url.encode("utf-8"),        # convert string to bytes
+            price.to_bytes(8, "big")    #convert number to 8-byte format
         ]
 
         params = algod_client.suggested_params()
         txn = ApplicationNoOpTxn(
-            sender=sender_address,
-            sp=params,
-            index=APP_ID,
-            app_args=app_args
+            sender=sender_address,   #my pera wallet address
+            sp=params,         #network parameters
+            index=APP_ID,     # my smart contract ID
+            app_args=app_args # data to send 
         )
 
-        signed_txn = txn.sign(private_key)
-        tx_id = algod_client.send_transaction(signed_txn)
-        confirmed_txn = wait_for_confirmation(algod_client, tx_id, 4)
+        signed_txn = txn.sign(private_key)                              # sign with my private key 
+        tx_id = algod_client.send_transaction(signed_txn)               # send to blockchain
+        confirmed_txn = wait_for_confirmation(algod_client, tx_id, 4)   # wait for confirmation
         
         flash("Song registered successfully!", "success")
         
     except Exception as e:
         flash(f"Error registering song: {e}", "error")
 
-    return redirect("/")
+    return redirect("/")    # back to the landing page 
 
 
 if __name__ == "__main__":
